@@ -13,6 +13,8 @@ let board = [
 const spaces = document.querySelectorAll(".dark-space");
 let whiteTurn = true;
 let selectedPieceId;
+let whitePieces;
+let blackPieces;
 let whiteScore = 12;
 let blackScore = 12;
 
@@ -28,7 +30,7 @@ function setUpBoard() {
     const blackPiece = document.createElement("div");
     blackPiece.classList.add("black-piece", "piece");
     blackPiece.id = `piece-${i}`;
-    blackPiece.setAttribute("onclick", "handlePieceSelect()");
+    // blackPiece.setAttribute("onclick", "handlePieceSelect()");
     spaces[i].append(blackPiece);
   }
   // Set 12 white pieces
@@ -36,7 +38,35 @@ function setUpBoard() {
     const whitePiece = document.createElement("div");
     whitePiece.classList.add("white-piece", "piece");
     whitePiece.id = `piece-${i - 8}`;
-    whitePiece.setAttribute("onclick", "handlePieceSelect()");
+    // whitePiece.setAttribute("onclick", "handlePieceSelect()");
     spaces[i].append(whitePiece);
   }
+  blackPieces = document.querySelectorAll(".dark-piece");
+  whitePieces = document.querySelectorAll(".white-piece");
+  determineTurn();
 }
+
+// Set pointer styles of pieces depending on turn
+function determineTurn() {
+  if (whiteTurn) {
+    for (let i = 0; i < whitePieces.length; i++) {
+      if (whitePieces[i]) {
+        whitePieces[i].style.cursor = "pointer";
+      }
+      if (blackPieces[i]) {
+        blackPieces[i].style.cursor = "context-menu";
+      }
+    }
+  } else {
+    for (let i = 0; i < blackPieces.length; i++) {
+      if (whitePieces[i]) {
+        whitePieces[i].style.cursor = "context-menu";
+      }
+      if (blackPieces[i]) {
+        blackPieces[i].style.cursor = "pointer";
+      }
+    }
+  }
+}
+
+setUpBoard();
