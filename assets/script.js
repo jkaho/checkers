@@ -8,3 +8,10 @@ let board = [
   null, 16, null, 17, null, 18, null, 19, 
   20, null, 21, null, 22, null, 23, null
 ]
+
+// game variables 
+const spaces = document.querySelectorAll(".dark-space");
+let whiteTurn = true;
+let selectedPieceId;
+let whiteScore = 12;
+let blackScore = 12;
