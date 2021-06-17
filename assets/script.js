@@ -106,6 +106,7 @@ function determinePossibleMoves(pieceId) {
   const currentSpace = board.indexOf(pieceId);
   const currentRow = Math.ceil(currentSpace / 8);
   const selectedPiece = document.getElementById(`piece-${pieceId}`);
+  possibleMoves = [];
   let opponent = "black";
   if (!whiteTurn) { opponent = "white" };
   // Determine moves for a king piece 
@@ -142,6 +143,7 @@ function determinePossibleMoves(pieceId) {
       possibleMoves.splice(possibleMoves.indexOf(move), 1);
     }
   })
+  // Alert if there are no moves for a piece
   if (!possibleMoves.length) {
     alert("This piece can't move!");
   } else {
@@ -156,7 +158,7 @@ function determinePossibleMoves(pieceId) {
   }
 }
 
-// Remove opacity style on possible move cell(s)
+// Remove whited out effect on possible move spaces
 function removeWhiteOut() {
   spaces.forEach(space => {
     space.classList.remove("possible-move");
