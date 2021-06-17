@@ -223,6 +223,20 @@ function handlePieceMove(newSpaceId, selectedPieceId, spacesJumped) {
       alert("Black wins!");
     }
   }
+  // Determine whether or not the moved piece has reached the other side of the board
+  if (!movedPiece.classList.contains("king")) {
+    if (movedPiece.classList.contains("white-piece")) {
+      if (newSpaceId >= 0 && newSpaceId <= 7) {
+        movedPiece.classList.add("king");
+        crownPiece(selectedPieceId);
+      }
+    } else {
+      if (newSpaceId >= 56 && newSpaceId <= 63) {
+        movedPiece.classList.add("king");
+        crownPiece(selectedPieceId);
+      }
+    }
+  }
   switchTurns();
   determineTurn();
 }
@@ -241,6 +255,16 @@ function switchTurns() {
     whiteTurn = false;
   } else {
     whiteTurn = true;
+  }
+}
+
+// Change colour of piece if it becomes king
+function crownPiece(selectedPieceId) {
+  const pieceToCrown = document.getElementById(`piece-${selectedPieceId}`);
+  if (pieceToCrown.classList.contains("black-piece")) {
+    pieceToCrown.style.background = "blue";
+  } else {
+    pieceToCrown.style.background = "green";
   }
 }
 
