@@ -224,6 +224,27 @@ function handlePieceMove(newSpaceId, selectedPieceId, spacesJumped) {
   spacesJumped.forEach(space => {
     document.getElementById(`space-${space}`).firstChild.remove();
   });
+  // Determine score and check for winner
+  checkScore();
+  if (whiteTurn) {
+    if (blackScore === 0) {
+      alert("White wins!");
+    }
+  } else {
+    if (whiteScore === 0) {
+      alert("Black wins!");
+    }
+  }
+}
+
+// Determine num of opponent pieces left
+function checkScore() {
+  if (whiteTurn) {
+    blackScore = document.querySelectorAll(".black-piece").length;
+  } else {
+    whiteScore = document.querySelectorAll(".white-piece").length;
+  }
+  console.log(blackScore, whiteScore)
 }
 
 setUpBoard();
