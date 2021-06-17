@@ -30,7 +30,7 @@ function setUpBoard() {
     const blackPiece = document.createElement("div");
     blackPiece.classList.add("black-piece", "piece");
     blackPiece.id = `piece-${i}`;
-    // blackPiece.setAttribute("onclick", "handlePieceSelect()");
+    blackPiece.setAttribute("onclick", "handlePieceSelect()");
     spaces[i].append(blackPiece);
   }
   // Set 12 white pieces
@@ -38,7 +38,7 @@ function setUpBoard() {
     const whitePiece = document.createElement("div");
     whitePiece.classList.add("white-piece", "piece");
     whitePiece.id = `piece-${i - 8}`;
-    // whitePiece.setAttribute("onclick", "handlePieceSelect()");
+    whitePiece.setAttribute("onclick", "handlePieceSelect()");
     spaces[i].append(whitePiece);
   }
   blackPieces = document.querySelectorAll(".dark-piece");
@@ -66,6 +66,25 @@ function determineTurn() {
         blackPieces[i].style.cursor = "pointer";
       }
     }
+  }
+}
+
+function handlePieceSelect() {
+  selectedPieceId = parseInt(event.target.id.split("-")[1]);
+  // If a white piece is selected on white's turn
+  if (whiteTurn && event.target.classList.contains("white-piece")) {
+    for (let i = 0; i < whitePieces.length; i++) {
+      whitePieces[i].style.border = "none";
+    }
+    event.target.style.border = "3px solid red";
+  // If a black piece is selected on black's turn
+  } else if (!whiteTurn && event.target.classList.contains("black-piece")) {
+    for (let i = 0; i < blackPieces.length; i++) {
+      blackPieces[i].style.border = "none";
+    }
+    event.target.style.border = "3px solid red";
+  } else {
+    return;
   }
 }
 
