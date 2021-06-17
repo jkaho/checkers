@@ -12,6 +12,7 @@ let board = [
 // Game variables 
 const spaces = document.querySelectorAll(".dark-space");
 let whiteTurn = true;
+let possibleMoves = [];
 let selectedPieceId;
 let whitePieces;
 let blackPieces;
@@ -86,6 +87,7 @@ function handlePieceSelect() {
   } else {
     return;
   }
+  determinePossibleMoves(selectedPieceId);
 }
 
 // Remove selected piece border on click away  
@@ -95,7 +97,111 @@ document.addEventListener("click", (event) => {
   }
   if (!event.target.matches("div") || event.target.id.split("-")[1] != selectedPieceId) {
     document.getElementById(`piece-${selectedPieceId}`).style.border = "none";
+    removeWhiteOut();
   }
 })
+
+// Determine possible moves after piece selection
+function determinePossibleMoves(pieceId) {
+  const currentSpace = board.indexOf(pieceId);
+  const currentRow = Math.ceil(currentSpace / 8);
+  const selectedPiece = document.getElementById(`piece-${pieceId}`);
+  let opponent = "black";
+  if (!whiteTurn) { opponent = "white" };
+  // Determine moves for a king piece 
+  if (selectedPiece.classList.contains("king")) {
+    // If in row 1 
+    if (currentRow === 1) {
+      determineOnePossibleMove(currentSpace, 7, opponent);
+      if (currentSpace !== 7) {
+        determineOnePossibleMove(currentSpace, 9, opponent);
+      }
+    } else if (currentRow === 8) {
+      determineOnePossibleMove(currentSpace, -7, opponent);
+      if (currentSpace !== 56) {
+        determineOnePossibleMove(currentSpace, -9, opponent);
+      }
+    } else {
+      determineOnePossibleMove(currentSpace, 7, opponent);
+      determineOnePossibleMove(currentSpace, 9, opponent);
+      determineOnePossibleMove(currentSpace, -7, opponent);
+      determineOnePossibleMove(currentSpace, -9, opponent);
+    }
+  } else {  
+    if (selectedPiece.classList.contains("white-piece") && currentRow !== 1) {
+      determineOnePossibleMove(currentSpace, -7, opponent);
+      determineOnePossibleMove(currentSpace, -9, opponent);
+    } else {
+      determineOnePossibleMove(currentSpace, 7, opponent);
+      determineOnePossibleMove(currentSpace, 9, opponent);
+    }
+  }
+  // Remove light spaces from possible moves
+  possibleMoves.forEach(move => {
+    if (document.getElementById(`space-${move.spaceToJump}`).classList.contains("light-space")) {
+      possibleMoves.splice(possibleMoves.indexOf(move), 1);
+    }
+  })
+  if (!possibleMoves.length) {
+    alert("This piece can't move!");
+  } else {
+    // Remove style on previously whited out spaces 
+    removeWhiteOut();
+    // White out spaces that piece can move to 
+    possibleMoves.forEach(move => {
+      let spaceToMoveTo = document.getElementById(`space-${move.spaceToJump}`);
+      spaceToMoveTo.classList.add("possible-move");
+      spaceToMoveTo.setAttribute("onclick", `handlePieceMove(${move.spaceToJump}, ${pieceId}, [${move.spacesToJumpOver}])`);
+    })
+  }
+}
+
+// Remove opacity style on possible move cell(s)
+function removeWhiteOut() {
+  spaces.forEach(space => {
+    space.classList.remove("possible-move");
+  })
+}
+
+function determineOnePossibleMove(currentSpace, numOfSpacesToMove, opponent) {
+  // Closest move 
+  if (board[currentSpace + numOfSpacesToMove] === null) {
+    possibleMoves.push({ 
+      spaceToJump: currentSpace + numOfSpacesToMove, 
+      spacesToJumpOver: []
+    });
+  // Possible jumps
+  } else if (document.getElementById(`piece-${board[currentSpace + numOfSpacesToMove]}`).classList.contains(`${opponent}-piece`) 
+    && board[currentSpace + (numOfSpacesToMove * 2)] === null) {
+      possibleMoves.push({ 
+        spaceToJump: currentSpace + (numOfSpacesToMove * 2), 
+        spacesToJumpOver: [currentSpace + numOfSpacesToMove]
+      });
+    if (board[currentSpace + (numOfSpacesToMove * 3)] !== null 
+    && document.getElementById(`piece-${board[currentSpace + (numOfSpacesToMove * 3)]}`).classList.contains(`${opponent}-piece`)) {
+      if (board[currentSpace + (numOfSpacesToMove * 4)] === null) {
+        possibleMoves.push({ 
+          spaceToJump: currentSpace + (numOfSpacesToMove * 4), 
+          spacesToJumpOver: [currentSpace + numOfSpacesToMove, currentSpace + (numOfSpacesToMove * 3)]
+        });
+      }
+    }
+    let num;
+    if (numOfSpacesToMove === 7 || numOfSpacesToMove === -9) {
+      num = 2;
+    } else {
+      num = -2;
+    }
+    if (board[currentSpace + (numOfSpacesToMove * 3 + num)] !== null 
+    && document.getElementById(`piece-${board[currentSpace + (numOfSpacesToMove * 3 + 2)]}`).classList.contains(`${opponent}-piece`)) {
+      if (board[currentSpace + (numOfSpacesToMove * 4 + 2(num))] === null) {
+        possibleMoves.push({ 
+          spaceToJump: currentSpace + (numOfSpacesToMove * 4 + 2(num)), 
+          spacesToJumpOver: [currentSpace + numOfSpacesToMove, currentSpace + (numOfSpacesToMove * 3 + num)]
+        });
+      }
+    }
+  } 
+}
 
 setUpBoard();
