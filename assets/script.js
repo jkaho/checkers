@@ -195,7 +195,7 @@ function determineOnePossibleMove(currentSpace, numOfSpacesToMove, opponent) {
       num = -2;
     }
     if (board[currentSpace + (numOfSpacesToMove * 3 + num)] !== null 
-    && document.getElementById(`piece-${board[currentSpace + (numOfSpacesToMove * 3 + 2)]}`).classList.contains(`${opponent}-piece`)) {
+    && document.getElementById(`piece-${board[currentSpace + (numOfSpacesToMove * 3 + num)]}`).classList.contains(`${opponent}-piece`)) {
       if (board[currentSpace + (numOfSpacesToMove * 4 + 2(num))] === null) {
         possibleMoves.push({ 
           spaceToJump: currentSpace + (numOfSpacesToMove * 4 + 2(num)), 
@@ -235,6 +235,8 @@ function handlePieceMove(newSpaceId, selectedPieceId, spacesJumped) {
       alert("Black wins!");
     }
   }
+  switchTurns();
+  determineTurn();
 }
 
 // Determine num of opponent pieces left
@@ -244,7 +246,14 @@ function checkScore() {
   } else {
     whiteScore = document.querySelectorAll(".white-piece").length;
   }
-  console.log(blackScore, whiteScore)
+}
+
+function switchTurns() {
+  if (whiteTurn) {
+    whiteTurn = false;
+  } else {
+    whiteTurn = true;
+  }
 }
 
 setUpBoard();
