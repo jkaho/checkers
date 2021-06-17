@@ -88,4 +88,14 @@ function handlePieceSelect() {
   }
 }
 
+// Remove selected piece border on click away  
+document.addEventListener("click", (event) => {
+  if (!selectedPieceId) {
+    return;
+  }
+  if (!event.target.matches("div") || event.target.id.split("-")[1] != selectedPieceId) {
+    document.getElementById(`piece-${selectedPieceId}`).style.border = "none";
+  }
+})
+
 setUpBoard();
