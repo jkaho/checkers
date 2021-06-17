@@ -42,7 +42,7 @@ function setUpBoard() {
     whitePiece.setAttribute("onclick", "handlePieceSelect()");
     spaces[i].append(whitePiece);
   }
-  blackPieces = document.querySelectorAll(".dark-piece");
+  blackPieces = document.querySelectorAll(".black-piece");
   whitePieces = document.querySelectorAll(".white-piece");
   determineTurn();
 }
@@ -50,23 +50,11 @@ function setUpBoard() {
 // Set pointer styles of pieces depending on turn
 function determineTurn() {
   if (whiteTurn) {
-    for (let i = 0; i < whitePieces.length; i++) {
-      if (whitePieces[i]) {
-        whitePieces[i].style.cursor = "pointer";
-      }
-      if (blackPieces[i]) {
-        blackPieces[i].style.cursor = "context-menu";
-      }
-    }
+    whitePieces.forEach(whitePiece => { whitePiece.style.cursor = "pointer" })
+    blackPieces.forEach(blackPiece => { blackPiece.style.cursor = "context-menu" })
   } else {
-    for (let i = 0; i < blackPieces.length; i++) {
-      if (whitePieces[i]) {
-        whitePieces[i].style.cursor = "context-menu";
-      }
-      if (blackPieces[i]) {
-        blackPieces[i].style.cursor = "pointer";
-      }
-    }
+    blackPieces.forEach(blackPiece => { blackPiece.style.cursor = "pointer" })
+    whitePieces.forEach(whitePiece => { whitePiece.style.cursor = "context-menu" })
   }
 }
 
@@ -196,9 +184,9 @@ function determineOnePossibleMove(currentSpace, numOfSpacesToMove, opponent) {
     }
     if (board[currentSpace + (numOfSpacesToMove * 3 + num)] !== null 
     && document.getElementById(`piece-${board[currentSpace + (numOfSpacesToMove * 3 + num)]}`).classList.contains(`${opponent}-piece`)) {
-      if (board[currentSpace + (numOfSpacesToMove * 4 + 2(num))] === null) {
+      if (board[currentSpace + (numOfSpacesToMove * 4 + (num * 2))] === null) {
         possibleMoves.push({ 
-          spaceToJump: currentSpace + (numOfSpacesToMove * 4 + 2(num)), 
+          spaceToJump: currentSpace + (numOfSpacesToMove * 4 + (num * 2)), 
           spacesToJumpOver: [currentSpace + numOfSpacesToMove, currentSpace + (numOfSpacesToMove * 3 + num)]
         });
       }
