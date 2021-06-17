@@ -1,0 +1,39 @@
+#board {
+  border: 5px solid rgb(177, 112, 69);
+}
+
+#board td {
+  height: 50px;
+  width: 50px;
+}
+
+.light-space {
+  background: rgb(241, 222, 184);
+}
+
+.dark-space {
+  background: rgb(177, 112, 69);
+}
+
+.black-piece, .white-piece {
+  height: 40px;
+  width: 40px;
+  border-radius: 100%;
+  background: black;
+  margin: 0 auto;
+  text-align: center;
+}
+
+i {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.white-piece {
+  background: white;
+}
+
+.possible-move {
+  opacity: 0.5;
+}
