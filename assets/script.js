@@ -206,4 +206,24 @@ function determineOnePossibleMove(currentSpace, numOfSpacesToMove, opponent) {
   } 
 }
 
+function handlePieceMove(newSpaceId, selectedPieceId, spacesJumped) {
+  // Remove onclick event from spaces
+  spaces.forEach(space => {
+    space.removeAttribute("onclick");
+  })
+  // Move piece to new position / update JS board
+  board.splice(board.indexOf(selectedPieceId), 1, null); // Set prev space to null
+  board.splice(newSpaceId, 1, selectedPieceId); // Set new space to selected piece id
+  spacesJumped.forEach(space => {
+    board.splice(space, 1, null); // Set space(s) with jumped opponents to null
+  })
+  // Move piece to new position / update DOM 
+  const movedPiece = document.getElementById(`piece-${selectedPieceId}`);
+  const newSpace = document.getElementById(`space-${newSpaceId}`);
+  newSpace.append(movedPiece);
+  spacesJumped.forEach(space => {
+    document.getElementById(`space-${space}`).firstChild.remove();
+  });
+}
+
 setUpBoard();
