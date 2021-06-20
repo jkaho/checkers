@@ -9,8 +9,16 @@ let board = [
   20, null, 21, null, 22, null, 23, null
 ]
 
-// Game variables 
+// DOM references
 const spaces = document.querySelectorAll(".dark-space");
+const whiteBox = document.getElementById("white-box");
+const whitePiecesLeft = document.getElementById("white-pieces-left");
+const piecesTakenByWhite = document.getElementById("white-pieces-taken");
+const blackBox = document.getElementById("black-box");
+const blackPiecesLeft = document.getElementById("black-pieces-left");
+const piecesTakenByBlack = document.getElementById("black-pieces-taken");
+
+// Game variables 
 let whiteTurn = true;
 let possibleMoves = [];
 let selectedPieceId;
@@ -18,7 +26,7 @@ let whitePieces;
 let blackPieces;
 let whiteScore = 12;
 let blackScore = 12;
-
+ 
 function setUpBoard() {
   // Clear the board if not empty
   spaces.forEach(space => {
@@ -45,6 +53,21 @@ function setUpBoard() {
   blackPieces = document.querySelectorAll(".black-piece");
   whitePieces = document.querySelectorAll(".white-piece");
   determineTurn();
+  updateTurnIndicator();
+}
+
+function updateTurnIndicator() {
+  // Empty values 
+  whitePiecesLeft.textContent = "";
+  blackPiecesLeft.textContent = "";
+  piecesTakenByWhite.textContent = "";
+  piecesTakenByBlack.textContent = "";
+
+  // Set new values 
+  whitePiecesLeft.append(whiteScore);
+  blackPiecesLeft.append(blackScore);
+  piecesTakenByWhite.append(12 - blackScore);
+  piecesTakenByBlack.append(12 - whiteScore);
 }
 
 // Set pointer styles of pieces depending on turn
@@ -52,9 +75,13 @@ function determineTurn() {
   if (whiteTurn) {
     whitePieces.forEach(whitePiece => { whitePiece.style.cursor = "pointer" })
     blackPieces.forEach(blackPiece => { blackPiece.style.cursor = "context-menu" })
+    blackBox.classList.add("not-turn");
+    whiteBox.classList.remove("not-turn");
   } else {
     blackPieces.forEach(blackPiece => { blackPiece.style.cursor = "pointer" })
     whitePieces.forEach(whitePiece => { whitePiece.style.cursor = "context-menu" })
+    whiteBox.classList.add("not-turn");
+    blackBox.classList.remove("not-turn");
   }
 }
 
@@ -324,6 +351,7 @@ function handlePieceMove(newSpaceId, selectedPieceId, spacesJumped) {
   }
   switchTurns();
   determineTurn();
+  updateTurnIndicator();
 }
 
 // Determine num of opponent pieces left

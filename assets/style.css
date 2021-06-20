@@ -1,3 +1,7 @@
+body {
+  width: fit-content;
+}
+
 #board {
   border: 5px solid rgb(177, 112, 69);
 }
@@ -35,5 +39,23 @@ i {
 }
 
 .possible-move {
+  opacity: 0.5;
+}
+
+#turn-indicator {
+  width: 100%;
+  display: flex;
+}
+
+.turn-box {
+  width: 50%;
+  flex: 1;
+}
+
+.turn-box span {
+  font-weight: bold;
+}
+
+.not-turn {
   opacity: 0.5;
 }
