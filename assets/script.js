@@ -374,10 +374,13 @@ function switchTurns() {
 // Change colour of piece if it becomes king
 function crownPiece(selectedPieceId) {
   const pieceToCrown = document.getElementById(`piece-${selectedPieceId}`);
+  const kingSpan = document.createElement("span");
+  kingSpan.textContent = "K";
+  pieceToCrown.append(kingSpan);
   if (pieceToCrown.classList.contains("black-piece")) {
-    pieceToCrown.style.background = "blue";
+    pieceToCrown.style.color = "white";
   } else {
-    pieceToCrown.style.background = "green";
+    pieceToCrown.style.color = "black";
   }
 }
 
