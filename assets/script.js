@@ -156,62 +156,6 @@ function determinePossibleMoves(pieceId) {
     })
   }
 }
-// // Determine possible moves after piece selection
-// function determinePossibleMoves(pieceId) {
-//   const currentSpace = board.indexOf(pieceId);
-//   const currentRow = Math.ceil(currentSpace / 8);
-//   const selectedPiece = document.getElementById(`piece-${pieceId}`);
-//   possibleMoves = [];
-//   let opponent = "black";
-//   if (!whiteTurn) { opponent = "white" };
-//   // Determine moves for a king piece 
-//   if (selectedPiece.classList.contains("king")) {
-//     // If in row 1 
-//     if (currentRow === 1) {
-//       determineOnePossibleMove(currentSpace, 7, opponent);
-//       if (currentSpace !== 7) {
-//         determineOnePossibleMove(currentSpace, 9, opponent);
-//       }
-//     } else if (currentRow === 8) {
-//       determineOnePossibleMove(currentSpace, -7, opponent);
-//       if (currentSpace !== 56) {
-//         determineOnePossibleMove(currentSpace, -9, opponent);
-//       }
-//     } else {
-//       determineOnePossibleMove(currentSpace, 7, opponent);
-//       determineOnePossibleMove(currentSpace, 9, opponent);
-//       determineOnePossibleMove(currentSpace, -7, opponent);
-//       determineOnePossibleMove(currentSpace, -9, opponent);
-//     }
-//   } else {  
-//     if (selectedPiece.classList.contains("white-piece") && currentRow !== 1) {
-//       determineOnePossibleMove(currentSpace, -7, opponent);
-//       determineOnePossibleMove(currentSpace, -9, opponent);
-//     } else {
-//       determineOnePossibleMove(currentSpace, 7, opponent);
-//       determineOnePossibleMove(currentSpace, 9, opponent);
-//     }
-//   }
-//   // Remove light spaces from possible moves
-//   possibleMoves.forEach(move => {
-//     if (document.getElementById(`space-${move.spaceToJump}`).classList.contains("light-space")) {
-//       possibleMoves.splice(possibleMoves.indexOf(move), 1);
-//     }
-//   })
-//   // Alert if there are no moves for a piece
-//   if (!possibleMoves.length) {
-//     alert("This piece can't move!");
-//   } else {
-//     // Remove style on previously whited out spaces 
-//     removeWhiteOut();
-//     // White out spaces that piece can move to 
-//     possibleMoves.forEach(move => {
-//       let spaceToMoveTo = document.getElementById(`space-${move.spaceToJump}`);
-//       spaceToMoveTo.classList.add("possible-move");
-//       spaceToMoveTo.setAttribute("onclick", `handlePieceMove(${move.spaceToJump}, ${pieceId}, [${move.spacesToJumpOver}])`);
-//     })
-//   }
-// }
 
 // Remove whited out effect on possible move spaces
 function removeWhiteOut() {
@@ -221,10 +165,8 @@ function removeWhiteOut() {
 }
 
 function determineOnePossibleMove(currentSpace, moves, opponent) {
-  console.log(moves)
   moves.forEach(move => {
     // If diagonal space is within board and unoccupied
-    console.log(board[currentSpace + move])
     if (currentSpace + move > 0 && currentSpace + move < 63) {
       if (board[currentSpace + move] === null) {
         possibleMoves.push({ 
@@ -234,7 +176,8 @@ function determineOnePossibleMove(currentSpace, moves, opponent) {
       // If diagonal space is occupied by an opponent, check for jumps
       } else if (board[currentSpace + move] !== null
         && document.getElementById(`piece-${board[currentSpace + move]}`).classList.contains(`${opponent}-piece`)) {
-        determinePossibleJumps(currentSpace, move);
+          determinePossibleJumps(currentSpace, move);
+          
       }
     }
   })
@@ -252,18 +195,20 @@ function checkAdjacentSpaces(currentSpace, move) {
 }
 
 function determinePossibleJumps(currentSpace, move) {
-  // while condition 
-  // If next space is on the board and unoccupied
-  if (board[currentSpace + (move * 2)] === null &&
-  currentSpace + (move * 2) > 0 &&
-  currentSpace + (move * 2) < 63) {
-    possibleMoves.push({ 
-      spaceToJump: currentSpace + (move * 2), 
-      spacesToJumpOver: [currentSpace + move]
-    });
-    // Check surrounding spaces
-    checkAdjacentSpaces(currentSpace, move);
-  } 
+  let multiplier = 2;
+  let spaceToJumpTo = currentSpace + (move * multiplier);
+  // if the space to jump to is on the board  
+  if (spaceToJumpTo > 0 && spaceToJumpTo < 63) {
+    // If space to jump to is unoccupied
+    if (board[spaceToJumpTo] === null) {
+      possibleMoves.push({ 
+        spaceToJump: spaceToJumpTo, 
+        spacesToJumpOver: [currentSpace + move]
+      });
+      // Check surrounding spaces
+      checkAdjacentSpaces(spaceToJumpTo, move);
+    } 
+  }
 }
 // function determineOnePossibleMove(currentSpace, numOfSpacesToMove, opponent) {
 //   // Closest move 
