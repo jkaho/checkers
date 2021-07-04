@@ -26,7 +26,8 @@ let whitePieces;
 let blackPieces;
 let whiteScore = 12;
 let blackScore = 12;
- 
+let jumpsAvailable = true;
+
 function setUpBoard() {
   // Clear the board if not empty
   spaces.forEach(space => {
@@ -176,8 +177,9 @@ function determineOnePossibleMove(currentSpace, moves, opponent) {
       // If diagonal space is occupied by an opponent, check for jumps
       } else if (board[currentSpace + move] !== null
         && document.getElementById(`piece-${board[currentSpace + move]}`).classList.contains(`${opponent}-piece`)) {
-          determinePossibleJumps(currentSpace, move);
-          
+          // while (jumpsAvailable) {
+            determinePossibleJumps(currentSpace, move);
+          // }
       }
     }
   })
@@ -205,10 +207,13 @@ function determinePossibleJumps(currentSpace, move) {
         spaceToJump: spaceToJumpTo, 
         spacesToJumpOver: [currentSpace + move]
       });
+      // jumpsAvailable = true;
       // Check surrounding spaces
       checkAdjacentSpaces(spaceToJumpTo, move);
     } 
   }
+  // if all moves have been checked and there are no jumps available
+  // jumpsAvailable = false;
 }
 // function determineOnePossibleMove(currentSpace, numOfSpacesToMove, opponent) {
 //   // Closest move 
